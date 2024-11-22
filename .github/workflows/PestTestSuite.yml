@@ -1,0 +1,27 @@
+name: Pest Test Suite
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  test:
+    name: Run Pest Tests
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Run tests with Pest v3
+      - name: Run Tests with Pest v3
+        uses: addnab/docker-run-action@v3
+        with:
+          image: myorg/pest-php:latest
+          options: --rm
+          run: |
+            php artisan test
