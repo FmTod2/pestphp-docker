@@ -54,33 +54,68 @@ docker run --rm -v $(pwd):/app -w /app myorg/pest-php:2 php artisan test
 Here’s an example workflow to run Pest tests using this Docker image:
 
 ```yaml
-name: Pest Test Suite
+name: "🐋 Build and Push Pest PHP Docker Image"
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - '*'
+  workflow_dispatch:  # Permite ejecución manual
+  release:
+    types: [published, prereleased, released, created]  # Se ejecuta al publicar una release
+
+concurrency:
+  group: ci-release-build
+  cancel-in-progress: true
+
+permissions:
+  contents: write  # Permisos necesarios para manejar releases
+  packages: write  # Permisos para publicar en DockerHub
 
 jobs:
-  test:
-    name: Run Pest Tests
+  build:
+    name: 'Build and Push Docker Image for Pest PHP'
     runs-on: ubuntu-latest
     steps:
-      # Check out the repository code
+      # Metadatos para las etiquetas de la imagen
+      - name: Docker Meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            myorg/pest-php
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            latest
+
+      # Clonar el código fuente
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Run tests with Pest v3
-      - name: Run Tests with Pest v3
-        uses: addnab/docker-run-action@v3
+      # Configurar soporte para QEMU (para soportar arquitecturas cruzadas)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      # Configurar Docker Buildx (para mejorar el proceso de build)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Iniciar sesión en DockerHub
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
         with:
-          image: myorg/pest-php:latest
-          options: --rm
-          run: |
-            php artisan test
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Construir y subir la imagen a DockerHub
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 ```
 
 ### **Custom PHP Extensions**
