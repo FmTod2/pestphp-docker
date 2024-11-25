@@ -1,5 +1,5 @@
 # Set PHP extensions to install
-ARG PHP_EXTS="bcmath mbstring pdo_mysql pcntl gd intl soap exif gd imagick igbinary redis opcache zip"
+ARG PHP_EXTS="bcmath mbstring pdo_mysql pcntl gd intl soap exif gd imagick igbinary redis opcache zip xdebug"
 
 # Base Image
 FROM serversideup/php:8.2-cli-alpine
