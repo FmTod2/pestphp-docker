@@ -28,10 +28,10 @@ RUN composer global config allow-plugins "true"
 RUN composer global require pestphp/pest:${PEST_VERSION} --no-progress --no-suggest
 
 # PATH configuration to use Pest from anywhere
-ENV PATH="$PATH:/root/.composer/vendor/bin"
+ENV PATH="$PATH:/composer/vendor/bin"
 
 # Set the user to run the tests
-USER data-www
+# USER www-data
 
 # Working directory (optional, configurable by the user)
 WORKDIR /app
