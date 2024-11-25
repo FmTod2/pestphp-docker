@@ -31,7 +31,7 @@ RUN composer global require pestphp/pest:${PEST_VERSION} --no-progress --no-sugg
 ENV PATH="$PATH:/composer/vendor/bin"
 
 # Set the user to run the tests
-# USER www-data
+USER www-data
 
 # Working directory (optional, configurable by the user)
 WORKDIR /app
