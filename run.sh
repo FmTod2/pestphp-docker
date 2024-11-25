@@ -23,7 +23,22 @@ else
     echo "No composer.json found. Using default Pest version: $PEST_VERSION"
 fi
 
-# Run the Docker container with the determined Pest version
-echo "Running Pest in Docker with version: $PEST_VERSION"
-docker run --rm -it -v "$(pwd):/app" "fmtod/pestphp:$PEST_VERSION" "$@"
+# Parse options, including combined ones like -it and -ti
+DOCKER_OPTIONS=""
+PEST_ARGS=""
+while [[ "$1" == -* ]]; do
+    case "$1" in
+        -*i*t*|-*t*i*) DOCKER_OPTIONS="$DOCKER_OPTIONS -it" ;;  # Handle combined -it or -ti
+        -*i*) DOCKER_OPTIONS="$DOCKER_OPTIONS -i" ;;            # Handle -i in combined or alone
+        -*t*) DOCKER_OPTIONS="$DOCKER_OPTIONS -t" ;;            # Handle -t in combined or alone
+        *) PEST_ARGS="$PEST_ARGS $1" ;;                         # Collect other arguments for Pest
+    esac
+    shift
+done
 
+# Collect any remaining arguments as Pest arguments
+PEST_ARGS="$PEST_ARGS $@"
+
+# Run the Docker container with the determined Pest version and options
+echo "Running Pest in Docker with version: $PEST_VERSION"
+docker run --rm $DOCKER_OPTIONS -v "$(pwd):/app" "fmtod/pestphp:$PEST_VERSION" $PEST_ARGS
