@@ -28,7 +28,7 @@ on:
 
 jobs:
   build:
-    name: 'Build and Push Docker Image for Pest PHP'
+    name: 'Build Docker Image'
     runs-on: ubuntu-latest
     steps:
       - name: Docker Meta
