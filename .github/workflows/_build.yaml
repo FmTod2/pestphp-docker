@@ -39,7 +39,7 @@ jobs:
             fmtod/pestphp
           flavor: |
             latest=auto
-            prefix=${{ inputs.pest_version }}
+            prefix=${{ inputs.pest_version }}-
             suffix=
           tags: |
             type=ref,event=branch
