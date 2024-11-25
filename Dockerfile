@@ -4,6 +4,9 @@ ARG PHP_EXTS="bcmath mbstring pdo_mysql pcntl gd intl soap exif gd imagick igbin
 # Base Image
 FROM serversideup/php:8.2-cli-alpine
 
+# Set the user to root to install dependencies
+USER root
+
 # Argument to select the Pest version (default is 3)
 ARG PEST_VERSION=3
 ENV PEST_VERSION=${PEST_VERSION}
@@ -26,11 +29,11 @@ RUN composer global require pestphp/pest:${PEST_VERSION} --no-progress --no-sugg
 # PATH configuration to use Pest from anywhere
 ENV PATH="$PATH:/root/.composer/vendor/bin"
 
+# Set the user to run the tests
+USER data-www
+
 # Working directory (optional, configurable by the user)
 WORKDIR /app
-
-# Set the user to run the tests
-USER pest
 
 # Default command (run Pest in the current folder)
 CMD ["pest"]
