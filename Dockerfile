@@ -24,6 +24,7 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 ENV XDEBUG_MODE=coverage,debug
 
 # Install Pest according to the provided version
+RUN composer global config allow-plugins "true"
 RUN composer global require pestphp/pest:${PEST_VERSION} --no-progress --no-suggest
 
 # PATH configuration to use Pest from anywhere
@@ -36,5 +37,5 @@ USER data-www
 WORKDIR /app
 
 # Default command (run Pest in the current folder)
-CMD ["pest"]
+ENTRYPOINT ["pest"]
 
