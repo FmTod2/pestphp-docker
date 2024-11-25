@@ -1,66 +1,37 @@
+# Set PHP extensions to install
+ARG PHP_EXTS="bcmath mbstring pdo_mysql pcntl gd intl soap exif gd imagick igbinary redis opcache zip"
+
 # Base Image
 FROM serversideup/php:8.2-cli-alpine
 
-# Maintainer information (opcional, pero recomendado)
-LABEL maintainer="Your Name <your.email@example.com>"
-
-# Argumento para seleccionar la versión de Pest (por defecto 3)
+# Argument to select the Pest version (default is 3)
 ARG PEST_VERSION=3
 ENV PEST_VERSION=${PEST_VERSION}
 
-# Configurar PHP con Xdebug y extensiones necesarias
-RUN apk add --no-cache \
-    autoconf \
-    build-base \
-    bash \
-    libtool \
-    icu-dev \
-    libxml2-dev \
-    libpng-dev \
-    imagemagick-dev \
-    libzip-dev \
-    oniguruma-dev \
-    && docker-php-ext-install \
-    bcmath \
-    mbstring \
-    pdo_mysql \
-    pcntl \
-    gd \
-    intl \
-    soap \
-    exif \
-    zip \
-    && pecl install \
-    redis \
-    imagick \
-    igbinary \
-    && docker-php-ext-enable \
-    redis \
-    imagick \
-    igbinary \
-    opcache \
-    && apk del autoconf build-base libtool
+# Use the PHP_EXTS build argument
+ARG PHP_EXTS
 
-# Configuración de PHP (usar archivo oficial de desarrollo)
+# Install additional PHP extensions
+RUN install-php-extensions ${PHP_EXTS}
+
+# PHP configuration (use official development file)
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
-# Configuración de Xdebug
+# Xdebug configuration
 ENV XDEBUG_MODE=coverage,debug
 
-# Instalación de Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Instalación de Pest según la versión proporcionada
+# Install Pest according to the provided version
 RUN composer global require pestphp/pest:${PEST_VERSION} --no-progress --no-suggest
 
-# Configuración de PATH para usar Pest desde cualquier lugar
+# PATH configuration to use Pest from anywhere
 ENV PATH="$PATH:/root/.composer/vendor/bin"
 
-# Directorio de trabajo (opcional, configurable por el usuario)
+# Working directory (optional, configurable by the user)
 WORKDIR /app
 
-# Permitir configuraciones adicionales vía ENV
-ENV CUSTOM_CONFIG="default"
+# Set the user to run the tests
+USER pest
 
-# Comando predeterminado (ejecutar Pest en la carpeta actual)
+# Default command (run Pest in the current folder)
 CMD ["pest"]
+
