@@ -25,7 +25,7 @@ ENV XDEBUG_MODE=coverage,debug
 
 # Install Pest according to the provided version
 RUN composer global config allow-plugins "true"
-RUN composer global require pestphp/pest:${PEST_VERSION} --no-progress --no-suggest
+RUN composer global require pestphp/pest:^${PEST_VERSION} --no-progress --no-suggest
 
 # PATH configuration to use Pest from anywhere
 ENV PATH="$PATH:/composer/vendor/bin"
