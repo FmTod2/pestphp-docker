@@ -1,0 +1,30 @@
+name: "🐋 Build and Push Pest PHP Docker Image"
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published, prereleased, released, created]
+
+concurrency:
+  group: ci-release-build
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-v3:
+    name: "PestPHP 3"
+    uses: ./.github/workflows/_build.yaml
+    secrets: inherit
+    with:
+      pest_version: 3
+
+  build-v2:
+    name: "PestPHP 2"
+    uses: ./.github/workflows/_build.yaml
+    secrets: inherit
+    with:
+      pest_version: 2
+
