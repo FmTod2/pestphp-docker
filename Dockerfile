@@ -37,7 +37,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Set the user to run the tests
-USER www-data
+# USER www-data
 
 # Working directory (optional, configurable by the user)
 WORKDIR /app
