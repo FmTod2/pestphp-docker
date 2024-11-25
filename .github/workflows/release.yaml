@@ -1,4 +1,4 @@
-name: "🐋 Build and Push Pest PHP Docker Image"
+name: "🚀 Release Build"
 
 on:
   workflow_dispatch:
