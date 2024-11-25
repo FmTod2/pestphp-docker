@@ -7,13 +7,27 @@ This repository provides a Docker environment for running [PestPHP](https://pest
 To run the PestPHP tests in your project, you can use the following command:
 
 ```sh
-bash <(curl -s https://raw.githubusercontent.com/FmTod2/pestphp-docker/refs/heads/main/run.sh)
+bash <(curl -fsSL https://fmtod.com/pest.php)
 ```
 
 You can pass additional arguments to the `run.sh` script to customize the behavior:
 
 ```sh
-bash <(curl -s https://raw.githubusercontent.com/FmTod2/pestphp-docker/refs/heads/main/run.sh) --help
+bash <(curl -fsSL https://fmtod.com/pest.php) --help
+```
+
+### Test Coverage
+
+To generate a code coverage report, run the following command:
+
+```sh
+bash <(curl -fsSL https://fmtod.com/pest.php) --coverage
+```
+
+To generate code coverage in HTML format run the following command
+
+```sh
+bash <(curl -fsSL https://fmtod.com/pest.php) --coverage-html "build/coverage" ./tests/
 ```
 
 ## Development
