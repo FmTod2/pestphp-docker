@@ -4,8 +4,16 @@ This repository provides a Docker environment for running [PestPHP](https://pest
 
 ## Usage
 
+To run the PestPHP tests in your project, you can use the following command:
+
 ```sh
-wget -O - https://raw.githubusercontent.com/FmTod2/pestphp-image/refs/heads/main/run.sh | bash
+curl -s https://raw.githubusercontent.com/FmTod2/pestphp-image/refs/heads/main/run.sh | bash
+```
+
+You can pass additional arguments to the `run.sh` script to customize the behavior:
+
+```sh
+curl -s https://raw.githubusercontent.com/FmTod2/pestphp-image/refs/heads/main/run.sh | bash -s -- --help
 ```
 
 ## Development
