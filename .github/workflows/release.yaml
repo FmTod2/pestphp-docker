@@ -3,7 +3,7 @@ name: "🚀 Release Build"
 on:
   workflow_dispatch:
   release:
-    types: [published, prereleased, released, created]
+    types: [published]
 
 concurrency:
   group: ci-release-build
