@@ -30,12 +30,18 @@ RUN composer global require pestphp/pest:^${PEST_VERSION} --no-progress --no-sug
 # PATH configuration to use Pest from anywhere
 ENV PATH="$PATH:/composer/vendor/bin"
 
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+
+# Ensure the script is executable
+RUN chmod +x /entrypoint.sh
+
 # Set the user to run the tests
 USER www-data
 
 # Working directory (optional, configurable by the user)
 WORKDIR /app
 
-# Default command (run Pest in the current folder)
-ENTRYPOINT ["pest"]
+# Set the script as the entry point
+ENTRYPOINT ["/entrypoint.sh"]
 
